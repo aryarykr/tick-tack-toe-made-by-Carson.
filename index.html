@@ -1,84 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Tic Tac Toe + Shop</title>
-<style>
-  body {
-    font-family: sans-serif;
-    margin: 0;
-    text-align: center;
-    background: #f7f7f7;
-    color: #000;
-    user-select: none;
-  }
-  #ui {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: white;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    z-index: 10;
-  }
-  #currency {
-    font-weight: bold;
-    margin-top: 5px;
-  }
-  #tttGame {
-    padding-top: 90px;
-  }
-  #board {
-    width: 306px;
-    margin: 20px auto;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .cell {
-    width: 100px;
-    height: 100px;
-    border: 1px solid black;
-    font-size: 60px;
-    line-height: 100px;
-    cursor: pointer;
-    position: relative;
-  }
-  .cell.highlight {
-    background-color: yellow;
-  }
-  #tttStatus {
-    height: 30px;
-    font-size: 18px;
-    margin: 10px 0;
-  }
-  #shop {
-    max-width: 350px;
-    margin: 20px auto;
-    text-align: left;
-  }
-  .shopItem {
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .shopItem button {
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  #modeButtons button {
-    margin: 0 5px;
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tic Tac Toe + Shop + IP Info</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      text-align: center;
+      background: #f7f7f7;
+      color: #000;
+      user-select: none;
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #leftPanel {
+      flex: 1;
+      max-width: 400px;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      box-sizing: border-box;
+      background: #fff;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      overflow-y: auto;
+      text-align: left;
+      font-size: 14px;
+    }
+    #ipInfoPanel {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #ipLink {
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    #ui {
+      position: fixed;
+      top: 0; left: 400px; right: 0;
+      background: white;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      height: 50px;
+    }
+    #currency {
+      font-weight: bold;
+      margin-top: 0;
+    }
+    #modeButtons button {
+      margin: 0 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    #tttGame {
+      margin-left: 400px;
+      padding-top: 70px;
+      flex: 2;
+      max-width: 500px;
+      width: 100%;
+    }
+    #board {
+      width: 306px;
+      margin: 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .cell {
+      width: 100px;
+      height: 100px;
+      border: 1px solid black;
+      font-size: 60px;
+      line-height: 100px;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+    }
+    .cell.highlight {
+      background-color: yellow;
+    }
+    #tttStatus {
+      height: 30px;
+      font-size: 18px;
+      margin: 10px 0;
+      min-height: 30px;
+    }
+    #shop {
+      max-width: 350px;
+      margin: 20px auto;
+      text-align: left;
+      font-size: 14px;
+    }
+    .shopItem {
+      padding: 8px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .shopItem button {
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #message {
+      margin: 10px auto;
+      font-weight: bold;
+      height: 22px;
+      min-height: 22px;
+      color: green;
+    }
+    /* Flash screen effect */
+    #flashScreen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+      opacity: 0.8;
+      mix-blend-mode: screen;
+    }
+  </style>
 </head>
 <body>
+
+<div id="leftPanel">
+  <h2>Game Info & Security</h2>
+  <div><strong>Your Public IP:</strong></div>
+  <div id="ipInfoPanel">Loading...</div>
+  <div style="margin-top:10px;">
+    Click your IP to view info:<br />
+    <a id="ipLink" href="#" target="_blank" rel="noopener noreferrer">Loading...</a>
+  </div>
+  <hr />
+  <div>
+    <strong>Instructions:</strong>
+    <ul>
+      <li>Use the buttons above to pick game mode.</li>
+      <li>Play vs Bot to earn or lose Dab Cones.</li>
+      <li>Buy shop items to improve your gameplay (active 1-2 rounds).</li>
+      <li>Click your IP above to check your public IP info.</li>
+    </ul>
+  </div>
+</div>
 
 <div id="ui">
   <div id="modeButtons">
@@ -93,8 +169,11 @@
   <h1>Tic Tac Toe</h1>
   <div id="board"></div>
   <div id="tttStatus"></div>
+  <div id="message"></div>
   <div id="shop"></div>
 </div>
+
+<div id="flashScreen"></div>
 
 <script>
 let board = [];
@@ -102,18 +181,46 @@ let currentTurn = 'X';
 let mode = 'friend';
 let gameOver = false;
 let cones = 0;
+let messageTimeout;
+let messageEl = null;
 
-// Shop Items: add as needed
 let shopItems = [
-  { name: "Win Bonus", cost: 50, bought: false, roundsLeft: 2 }, // doubles win cones for 2 rounds
-  { name: "Extra Move", cost: 80, bought: false, roundsLeft: 2 }, // lets player move twice
-  { name: "Faster Bot", cost: 70, bought: false, roundsLeft: 2 }, // bot moves faster
-  { name: "Flash Screen", cost: 90, bought: false, roundsLeft: 1 }, // screen flash effect
-  { name: "Smart Bot", cost: 150, bought: false, roundsLeft: 2 } // perfect bot logic
+  { name: "Win Bonus (+100 cones)", cost: 50, bought: false, roundsActive: 0, apply: () => {} },
+  { name: "Extra Move (1 round)", cost: 60, bought: false, roundsActive: 0 },
+  { name: "Faster Bot (1 round)", cost: 70, bought: false, roundsActive: 0 },
+  { name: "Highlight Wins (1 round)", cost: 40, bought: false, roundsActive: 0 },
+  { name: "Flash Screen (10s)", cost: 90, bought: false, roundsActive: 0 },
+  { name: "Cursor Cycle (1 round)", cost: 55, bought: false, roundsActive: 0 },
+  { name: "Smart Bot (1 round)", cost: 100, bought: false, roundsActive: 0 },
+  { name: "Auto Play Speed (1 round)", cost: 80, bought: false, roundsActive: 0 },
+  { name: "Double Cones Win (1 round)", cost: 120, bought: false, roundsActive: 0 },
+  { name: "Shield (skip loss penalty 1 round)", cost: 75, bought: false, roundsActive: 0 },
+  // Add 10 more working items below
+  { name: "Skip Opponent Turn (1 round)", cost: 65, bought: false, roundsActive: 0 },
+  { name: "Reveal One Cell (1 round)", cost: 30, bought: false, roundsActive: 0 },
+  { name: "Undo Last Move (1 round)", cost: 85, bought: false, roundsActive: 0 },
+  { name: "Freeze Bot (1 round)", cost: 90, bought: false, roundsActive: 0 },
+  { name: "Slow Opponent (1 round)", cost: 50, bought: false, roundsActive: 0 },
+  { name: "Extra Dab Cones +20", cost: 20, bought: false, roundsActive: 0 },
+  { name: "Bot Mistake Chance (1 round)", cost: 100, bought: false, roundsActive: 0 },
+  { name: "Auto Block (1 round)", cost: 110, bought: false, roundsActive: 0 },
+  { name: "Win Streak Tracker", cost: 45, bought: false, roundsActive: 0 },
+  { name: "Lose Streak Tracker", cost: 45, bought: false, roundsActive: 0 }
 ];
 
-let extraMoveActive = false;
-let movesMadeThisTurn = 0;
+let flashInterval = null;
+let flashColors = ["red","orange","yellow","green","blue","indigo","violet"];
+let flashIndex = 0;
+
+let autoPlaySpeed = 800;
+let cursorCycleInterval = null;
+
+let smartBotActive = false;
+
+let botFallbackTimeout = null;
+
+let winStreak = 0;
+let loseStreak = 0;
 
 function updateCurrency() {
   document.getElementById('currency').textContent = `Dab Cones: ${cones}`;
@@ -121,23 +228,38 @@ function updateCurrency() {
 
 function setMode(m) {
   mode = m;
+  resetShopRounds();
   startGame();
+  showMessage(`Mode set to ${m}`, true);
+}
+
+function resetShopRounds() {
+  shopItems.forEach(item => {
+    if(item.roundsActive > 0){
+      item.roundsActive = 0;
+      item.bought = false;
+    }
+  });
+  clearFlash();
+  clearCursorCycle();
+  smartBotActive = false;
+  autoPlaySpeed = 800;
 }
 
 function startGame() {
   board = Array(9).fill('');
   currentTurn = 'X';
   gameOver = false;
-  extraMoveActive = shopItems[1].bought && shopItems[1].roundsLeft > 0;
-  movesMadeThisTurn = 0;
   renderBoard();
   updateStatus(`Turn: ${currentTurn}`);
   renderShop();
   updateCurrency();
+  clearMessage();
 
-  if (mode === 'botvsbot') botVsBot();
-  else if (mode === 'bot' && currentTurn === 'O') {
-    setTimeout(botMove, getBotSpeed());
+  if (mode === 'botvsbot') {
+    setTimeout(botVsBot, 500);
+  } else if (mode === 'bot' && currentTurn === 'O') {
+    botFallbackSchedule();
   }
 }
 
@@ -159,23 +281,25 @@ function handleClick(i) {
   if (mode === 'bot' && currentTurn === 'O') return;
 
   board[i] = currentTurn;
-  movesMadeThisTurn++;
   renderBoard();
   checkGameEnd();
 
-  if (gameOver) return;
+  if (!gameOver) {
+    if (shopItems[1].bought && shopItems[1].roundsActive > 0 && currentTurn === 'X') {
+      // Extra move - player gets to move again on X turn
+      shopItems[1].roundsActive--;
+      showMessage("Extra Move used!");
+      updateStatus(`Turn: ${currentTurn} (Extra Move)`);
+      return; // don't switch turn
+    }
 
-  if (extraMoveActive && movesMadeThisTurn < 2 && currentTurn === 'X' && mode === 'bot') {
-    updateStatus(`Extra move! Turn: ${currentTurn}`);
-    return;
-  }
+    currentTurn = currentTurn === 'X' ? 'O' : 'X';
+    updateStatus(`Turn: ${currentTurn}`);
 
-  movesMadeThisTurn = 0;
-  currentTurn = currentTurn === 'X' ? 'O' : 'X';
-  updateStatus(`Turn: ${currentTurn}`);
-
-  if (mode === 'bot' && currentTurn === 'O') {
-    setTimeout(botMove, getBotSpeed());
+    if (mode === 'bot' && currentTurn === 'O') {
+      botFallbackSchedule();
+      setTimeout(botMove, autoPlaySpeed);
+    }
   }
 }
 
@@ -196,33 +320,34 @@ function checkGameEnd() {
       updateStatus(`${board[a]} Wins!`);
       gameOver = true;
 
+      // Handle cones rewards/penalties only in play vs bot mode
       if (mode === 'bot') {
         if (board[a] === 'X') {
-          let reward = shopItems[0].bought && shopItems[0].roundsLeft > 0 ? 200 : 100;
-          cones += reward;
-          if (shopItems[0].bought && shopItems[0].roundsLeft > 0) shopItems[0].roundsLeft--;
+          cones += shopItems[0].bought && shopItems[0].roundsActive > 0 ? 200 : 100;
+          winStreak++;
+          loseStreak = 0;
+          if (shopItems[8].bought) cones += 20; // Extra Dab Cones item
         } else if (board[a] === 'O') {
-          cones -= 100;
-          if (cones < 0) cones = 0;
-        }
-      }
-
-      shopItems.forEach(item => {
-        if (item.bought && item.roundsLeft !== undefined && item.roundsLeft > 0) {
-          item.roundsLeft--;
-          if (item.roundsLeft <= 0) {
-            item.bought = false;
-            alert(`${item.name} effect has expired!`);
+          if (shopItems[9].bought && shopItems[9].roundsActive > 0) {
+            // Shield item prevents penalty once
+            shopItems[9].roundsActive--;
+            showMessage("Shield protected you from loss penalty!");
+          } else {
+            cones -= 100;
+            loseStreak++;
+            winStreak = 0;
           }
         }
-      });
-
+      } else {
+        winStreak = 0; loseStreak = 0;
+      }
       updateCurrency();
-      renderShop();
+      updateStreakTracker();
 
-      if (shopItems[3].bought) flashScreen(10);
+      // Reset shop items with roundsActive
+      decrementShopRounds();
 
-      setTimeout(startGame, 2000);
+      setTimeout(startGame, 3000);
       return;
     }
   }
@@ -230,7 +355,10 @@ function checkGameEnd() {
   if (!board.includes('')) {
     updateStatus('Draw!');
     gameOver = true;
-    setTimeout(startGame, 2000);
+    winStreak = 0; loseStreak = 0;
+    updateStreakTracker();
+    decrementShopRounds();
+    setTimeout(startGame, 3000);
   }
 }
 
@@ -239,43 +367,42 @@ function highlightCells(cells) {
   cells.forEach(i => cellDivs[i].classList.add('highlight'));
 }
 
-function getBotSpeed() {
-  return shopItems[2].bought && shopItems[2].roundsLeft > 0 ? 200 : 500;
-}
-
 function botMove() {
-  if (gameOver) return;
+  clearTimeout(botFallbackTimeout);
   let empty = board.map((v, i) => v === '' ? i : null).filter(v => v !== null);
+
   if (empty.length === 0) return;
 
-  if (shopItems[4].bought && shopItems[4].roundsLeft > 0) {
+  // Smart bot logic (if active)
+  if (smartBotActive && mode === 'bot') {
     let move = findBestMove(board, 'O');
-    if (move !== null) {
-      board[move] = 'O';
-      renderBoard();
-      checkGameEnd();
-      if (!gameOver) {
-        currentTurn = 'X';
-        updateStatus(`Turn: ${currentTurn}`);
-      }
-      return;
-    }
+    if (move === -1) move = empty[Math.floor(Math.random() * empty.length)];
+    board[move] = currentTurn;
+  } else {
+    let move = empty[Math.floor(Math.random() * empty.length)];
+    board[move] = currentTurn;
   }
 
-  let move = empty[Math.floor(Math.random() * empty.length)];
-  board[move] = 'O';
   renderBoard();
   checkGameEnd();
 
   if (!gameOver) {
-    currentTurn = 'X';
+    currentTurn = currentTurn === 'X' ? 'O' : 'X';
     updateStatus(`Turn: ${currentTurn}`);
+
+    if (mode === 'bot' && currentTurn === 'O') {
+      botFallbackSchedule();
+      setTimeout(botMove, autoPlaySpeed);
+    }
   }
 }
 
 function botVsBot() {
   if (gameOver) {
-    setTimeout(startGame, 1000);
+    setTimeout(() => {
+      resetShopRounds();
+      startGame();
+    }, 2000);
     return;
   }
   let empty = board.map((v, i) => v === '' ? i : null).filter(v => v !== null);
@@ -288,94 +415,10 @@ function botVsBot() {
   if (!gameOver) {
     currentTurn = currentTurn === 'X' ? 'O' : 'X';
     updateStatus(`Turn: ${currentTurn}`);
-    setTimeout(botVsBot, getBotSpeed());
+    setTimeout(botVsBot, 500);
   }
 }
 
 function renderShop() {
-  const shop = document.getElementById('shop');
-  shop.innerHTML = "<h3>Shop</h3>";
-  shopItems.forEach((item, idx) => {
-    const isDisabled = item.bought;
-    const roundsText = item.bought && item.roundsLeft !== undefined ? ` (Rounds left: ${item.roundsLeft})` : '';
-    const buttonText = isDisabled ? "Owned" : "Buy";
-    const buttonDisabledAttr = isDisabled ? "disabled" : "";
-    const div = document.createElement('div');
-    div.className = 'shopItem';
-    div.innerHTML = `
-      <span>${item.name} (${item.cost} cones)${roundsText}</span>
-      <button ${buttonDisabledAttr} onclick="buyItem(${idx})">${buttonText}</button>
-    `;
-    shop.appendChild(div);
-  });
-}
-
-function buyItem(i) {
-  const item = shopItems[i];
-  if (cones >= item.cost && !item.bought) {
-    cones -= item.cost;
-    item.bought = true;
-    item.roundsLeft = item.roundsLeft || 2;
-    updateCurrency();
-    renderShop();
-    alert(`You bought ${item.name}!`);
-  } else if (item.bought) {
-    alert(`You already own ${item.name}.`);
-  } else {
-    alert(`Not enough Dab Cones to buy ${item.name}.`);
-  }
-}
-
-function findBestMove(board, player) {
-  const opponent = player === 'X' ? 'O' : 'X';
-  const wins = [
-    [0,1,2],[3,4,5],[6,7,8],
-    [0,3,6],[1,4,7],[2,5,8],
-    [0,4,8],[2,4,6]
-  ];
-
-  for (let combo of wins) {
-    let marks = combo.map(i => board[i]);
-    if (marks.filter(m => m === player).length === 2 && marks.includes('')) {
-      return combo[marks.indexOf('')];
-    }
-  }
-
-  for (let combo of wins) {
-    let marks = combo.map(i => board[i]);
-    if (marks.filter(m => m === opponent).length === 2 && marks.includes('')) {
-      return combo[marks.indexOf('')];
-    }
-  }
-  return null;
-}
-
-function flashScreen(seconds) {
-  let elapsed = 0;
-  const interval = 500; // 0.5 sec
-  const colors = ['red','orange','yellow','green','blue','indigo','violet','pink','cyan','lime'];
-  const flashDiv = document.createElement('div');
-  flashDiv.style.position = 'fixed';
-  flashDiv.style.top = 0;
-  flashDiv.style.left = 0;
-  flashDiv.style.width = '100%';
-  flashDiv.style.height = '100%';
-  flashDiv.style.zIndex = 9999;
-  flashDiv.style.opacity = 0.7;
-  document.body.appendChild(flashDiv);
-
-  const flashInterval = setInterval(() => {
-    flashDiv.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    elapsed += interval;
-    if (elapsed >= seconds * 1000) {
-      clearInterval(flashInterval);
-      document.body.removeChild(flashDiv);
-    }
-  }, interval);
-}
-
-startGame();
-</script>
-</body>
-</html>
+  const shop = document
 
